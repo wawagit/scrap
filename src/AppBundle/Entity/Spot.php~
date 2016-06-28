@@ -1,0 +1,32 @@
+<?php
+
+namespace AppBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+use CoreCommonBundle\Entity\Traits\InsertUpdateDateTimeTrait;
+use Gedmo\Mapping\Annotation as Gedmo;
+use DoctrineProxyBundle\Annotations\TableType;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use CoreCommonBundle\Util\Canonicalizer;
+
+/**
+ * Spot
+ *
+ * @ORM\Table(name="spot")
+ * @ORM\Entity(repositoryClass="AppBundle\Repository\SpotRepository")
+ */
+class Spot {
+
+    /**
+     * @ORM\Column(name="spot_id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    private $id;
+
+    /**
+     * @ORM\Column(name="label", type="string", length=60, unique=true)
+     */
+    private $label;
+}
