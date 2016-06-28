@@ -31,17 +31,28 @@ class ScrappingCommand extends ContainerAwareCommand
         $doctrineManager = $this->getContainer()->get('doctrine')->getManager();
 
         // Go to the symfony.com website
-        $crawler = $client->request('GET', 'http://www.symfony.com/blog/');
+        $crawler = $client->request('GET', 'https://www.tripadvisor.fr/Search?geo=&pid=3826&typeaheadRedirect=true&redirect=&startTime=1467117962675&uiOrigin=MASTHEAD&q=surfcamp+maroc&returnTo=https%253A__2F____2F__www__2E__tripadvisor__2E__fr__2F__&searchSessionId=B787F67F93403F05C53AB22B50F8C76A1467125166655ssid');
 
         $spots = [];
-        $crawler->filter('h2 > a')->each(function ($node) {
-            $spot = new Spot();
+        $spot = new Spot();
+
+        //1st filter
+        $crawler->filter('.title > span > span')->each(function ($node) use ($spot) {
 
             $label = trim($node->text());
             $spot->setLabel($label);
 
-            $this->spots[] = $spot;
         });
+
+        // 2nd filter
+        $crawler->filter('.title > span > span')->each(function ($node) use ($spot) {
+
+            $label = trim($node->text());
+            $spot->setLabel($label);
+
+        });
+
+        $this->spots[] = $spot;
 
         foreach($this->spots as $spot) {
             $doctrineManager->persist($spot);
